@@ -1,11 +1,13 @@
+
 function taskA() {
     console.log("Task A");
+    throw new Error("throw Error @ Task A")
 }
 function taskB() {
-    console.log("Task B");
+    console.log("Task B");// 不会被调用
 }
 function onRejected(error) {
-    console.log("Catch Error: A or B", error);
+    console.log(error);// => "throw Error @ Task A"
 }
 function finalTask() {
     console.log("Final Task");
