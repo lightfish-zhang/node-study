@@ -7,7 +7,6 @@ const net = require('net');
 // 在每一个“connection”事件中，该回调函数接收到的socket对象是唯一的
 const server = net.createServer();
 
-
 server.listen(6969, '127.0.0.1',
     ()=>{
         console.log('Server listening on ' +
@@ -25,14 +24,22 @@ server.on('connection', (socket)=> {
     });
 
     socket.on('data', (data)=> {
-        console.log(socket.remoteAddress +':'+ socket.remotePort + ' ' + data );
+        let p = Promise.resolve();
+        p.then(()=>{
+            let message = String(data);
+            console.log(socket.remoteAddress +':'+ socket.remotePort + ' ' + message );
+            return message;
+        }).then((message)=>{
+            if(message === 'bye'){
+                socket.write('see you~\n');
+                socket.destroy();// 完全关闭连接
+            }else{
+                //todo:: find database
 
-        let message = String(data);
-        if(message === 'bye'){
-            socket.write('see you~\n');
-            socket.destroy();// 完全关闭连接
-        }
-
+            }
+        }).catch((err)=>{
+            console.error(err);
+        });
     });
 
 });

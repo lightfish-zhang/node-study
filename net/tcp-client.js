@@ -34,6 +34,8 @@ client.connect(6969, '127.0.0.1', ()=>{
                 return message;
             }).then((message)=>{
                 client.write(message);
+            }).catch((err)=>{
+                console.error(err);
             });
         }
 
